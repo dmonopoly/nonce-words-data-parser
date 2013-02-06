@@ -4,9 +4,7 @@ var DELIMITER = ",";
 // Returns the transformed text
 function transform(text) {
 	console.log("Input: \n"+text);
-
-	// Seed it
-	text = "Hi , this"; // tmp
+	text = text.trim();
 
 	var lines = text.split("\n");
 	var numLines = lines.length;
@@ -29,7 +27,8 @@ function transform(text) {
 	// rows[0] = "stoofed, 5, 7, hugged, 4, 6, 1"
 	// rows[1] = "stoofed, 5, 7, hugged, 4, 6, 1"
 	// rows[2] = "stoofed, 5, 7, hugged, 4, 6, 1"
-	var result = _combineRows(rows);
+	// var result = _combineRows(rows);
+	var result = _flattenArrayByDelimiter(rows, '\n');
 	return result;
 }
 
@@ -47,8 +46,7 @@ function _generateOutputRow(nonceWord, interpretation) {
 	output[5] = _countLetters(interpretation);
 	output[6] = rsa1 - rsa2;
 
-	// flatten to string first?
-	return output;
+	return _flattenArrayByDelimiter(output, DELIMITER);
 }
 
 function _computeRSA(word) {
@@ -59,12 +57,12 @@ function _countLetters(word) {
 	return '[COUNT HERE]'
 }
 
-// Combines rows into a string. Used to produce resulting string.
-function _combineRows(rows) {
+// Combines elements of array into a string, separating each element with delimiter. 
+function _flattenArrayByDelimiter(array, delimiter) {
 	var result = ""; // a string
-	console.log("Combining rows");
-	for (var i=0; i<rows.length; i++) {
-		result += rows[i] + '\n';
+	console.log("Flattening array");
+	for (var i=0; i<array.length; i++) {
+		result += array[i] + delimiter;
 	}
 	return result;
 }
