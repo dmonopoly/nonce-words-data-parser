@@ -68,7 +68,7 @@ function _computeRSA(word) {
 }
 
 function _countLetters(word) {
-	// return '[COUNT HERE]'
+	word = word.replace(/\s+/g, '');
 	return word.length;
 }
 
@@ -76,9 +76,10 @@ function _countLetters(word) {
 function _flattenArrayByDelimiter(array, delimiter) {
 	var result = ""; // a string
 	console.log("Flattening array");
-	for (var i=0; i<array.length; i++) {
+	for (var i=0; i<array.length-1; i++) {
 		result += array[i] + delimiter;
 	}
+	result += array[array.length-1]; // array.last
 	return result;
 }
 
@@ -107,6 +108,8 @@ function testIncludeMethod() {
 	console.log("result2: "+result2); // should be true
 }
 
-function testLeftOrRightLetter() {
-
+function testSpaceRemoval() {
+	var str = 'picked on';
+	str = str.replace(/\s+/g, '');
+	console.log(str);
 }

@@ -10,7 +10,8 @@
        $("#submit_button").click(function() {
             var QUICK_TEST = false;
             if (QUICK_TEST) {
-                testIncludeMethod();
+                testSpaceRemoval();
+                // testIncludeMethod();
             } else {
                 text = $("#input_area").val();
                 output = transform(text);
@@ -24,6 +25,6 @@
     <h1>Nonce Words Data Parser</h1>
     <textarea id="input_area" placeholder="Edit me" cols="30" rows="15"></textarea><br>
     <input id="submit_button" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
-    <textarea id="output_area" readonly placeholder="Output will be here" cols="80" rows="15"></textarea><br>
+    <textarea id="output_area" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>
 </body>
 </html>
