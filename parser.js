@@ -1,5 +1,7 @@
 // Global var
 var DELIMITER = ",";
+var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','y','b'];
+var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
 // Returns the transformed text
 function transform(text) {
@@ -50,11 +52,24 @@ function _generateOutputRow(nonceWord, interpretation) {
 }
 
 function _computeRSA(word) {
-	return '[RSA HERE]'
+	word = word.toLowerCase();
+
+	var leftCount = 0;
+	var rightCount = 0;
+	for (var i=0; i<word.length; i++) {
+		if (_include(LEFT_LETTERS, word[i])) {
+			leftCount++;
+		} else if (_include(RIGHT_LETTERS, word[i])) {
+			rightCount++;
+		}
+	}
+
+	return rightCount - leftCount;
 }
 
 function _countLetters(word) {
-	return '[COUNT HERE]'
+	// return '[COUNT HERE]'
+	return word.length;
 }
 
 // Combines elements of array into a string, separating each element with delimiter. 
@@ -76,4 +91,22 @@ function _trim(myArray) {
 		myArray[i] = myArray[i].trim();
 	}
 	console.log("Trimmed Output 1: ("+myArray[0]+")("+myArray[1]+")");
+}
+
+// Return true if array contains the object
+function _include(arr, obj) {
+    return (arr.indexOf(obj) != -1);
+}
+
+/* Test methods */
+function testIncludeMethod() {
+	var word = 'myword'
+	var result = _include(LEFT_LETTERS, word[0]);
+	var result2 = _include(LEFT_LETTERS, word[1]);
+	console.log("result: "+result); // should be false
+	console.log("result2: "+result2); // should be true
+}
+
+function testLeftOrRightLetter() {
+
 }

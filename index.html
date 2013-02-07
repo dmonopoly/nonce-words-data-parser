@@ -8,9 +8,14 @@
     <script type="text/javascript">
     $(document).ready(function() { // do stuff when DOM is ready
        $("#submit_button").click(function() {
-            text = $("#input_area").val();
-            output = transform(text);
-            $("#output_area").val(output);
+            var QUICK_TEST = false;
+            if (QUICK_TEST) {
+                testIncludeMethod();
+            } else {
+                text = $("#input_area").val();
+                output = transform(text);
+                $("#output_area").val(output);
+            }
         });
     });
     </script>
