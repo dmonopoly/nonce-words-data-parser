@@ -68,6 +68,8 @@ function _computeRSA(word) {
 }
 
 function _countLetters(word) {
+	// Note that various characters that are not counted
+	word = word.replace(/[\.-\/#!$%\^&\*;:{}@=\-_`~()]/g,"");
 	word = word.replace(/\s+/g, '');
 	return word.length;
 }
