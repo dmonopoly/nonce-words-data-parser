@@ -3,8 +3,12 @@ var DELIMITER = ",";
 var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','y','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
+function transform1ColumnForRSAAndLength(text) {
+	return 'hi';
+}
+
 // Returns the transformed text
-function transform(text) {
+function transform2ColumnsForRSAAndLength(text) {
 	console.log("Input: \n"+text);
 	text = text.trim();
 

@@ -1,7 +1,26 @@
+.myborder {
+	border: 1px solid green;
+}
+div#content {
+	width: 950px;
+	margin: 0 auto;
+}
 body {
 	text-align: center;
+	margin: 0 auto;
 }
 
 .analysis_area {
+	text-align: center;
+	margin: 0 auto;
+	width: 400px;
+}
+.analysis_area_title {
+	font-size: 18px;
+	font-weight: bold;
+}
+.instructions {
+	width: 400px;
+	text-align: center;
 
 }
