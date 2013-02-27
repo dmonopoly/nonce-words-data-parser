@@ -4,7 +4,29 @@ var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','y','b']
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
 function transform1ColumnForRSAAndLength(text) {
-	return 'hi';
+	console.log("Input: \n"+text);
+	text = text.trim();
+
+	var lines = text.split("\n");
+	var numLines = lines.length;
+
+	// resultant rows - 
+	// after algorithm rows[0] could be e.g. "stoofed, XX, 7" with XX as RSAs
+	var rows = Array(); // can do rows.push(element)
+
+	for (var i=0; i<numLines; i++) {
+		var line = lines[i];
+		var inputRow = line.split(',');
+		// inputRow[0] -> the only word
+		_trim(inputRow);
+		console.log("Trimmed Output 2: ("+inputRow[0]+")("+inputRow[1]+")");
+		rows.push(_generateOutputRowFromOneWord(inputRow[0]));
+	}
+	// test
+	// rows[0] = "stoofed"
+	// rows[1] = "stoofed"
+	var result = _flattenArrayByDelimiter(rows, '\n');
+	return result;
 }
 
 // Returns the transformed text
@@ -26,20 +48,30 @@ function transform2ColumnsForRSAAndLength(text) {
 		// inputRow[1] -> interpretation
 		_trim(inputRow);
 		console.log("Trimmed Output 2: ("+inputRow[0]+")("+inputRow[1]+")");
-		rows.push(_generateOutputRow(inputRow[0], inputRow[1]));
+		rows.push(_generateOutputRowFromTwoWords(inputRow[0], inputRow[1]));
 	}
 
 	// test
 	// rows[0] = "stoofed, 5, 7, hugged, 4, 6, 1"
 	// rows[1] = "stoofed, 5, 7, hugged, 4, 6, 1"
 	// rows[2] = "stoofed, 5, 7, hugged, 4, 6, 1"
-	// var result = _combineRows(rows);
 	var result = _flattenArrayByDelimiter(rows, '\n');
 	return result;
 }
 
-// Generates a single output row based on the given nonce word and interpretation.
-function _generateOutputRow(nonceWord, interpretation) {
+function _generateOutputRowFromOneWord(word) {
+	var output = Array();
+	var rsa = _computeRSA(word);
+
+	output[0] = word;
+	output[1] = rsa;
+	output[2] = _countLetters(word);
+
+	return _flattenArrayByDelimiter(output, DELIMITER);
+}
+
+// Generates a single output row based on the given 2 words: nonce word and interpretation.
+function _generateOutputRowFromTwoWords(nonceWord, interpretation) {
 	var output = Array();
 	var rsa1 = _computeRSA(nonceWord);
 	var rsa2 = _computeRSA(interpretation);

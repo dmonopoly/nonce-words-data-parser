@@ -8,6 +8,11 @@
 
     <script type="text/javascript">
     $(document).ready(function() { // do stuff when DOM is ready
+        /* Background things */
+        $("#background_toggle").click(function() {
+            $("#background_area").toggle();
+        });
+
         // #submit_button_1 is for 'analyze 1 word for RSA and length'
         // #submit_button_2 is for 'analyze 2 words for RSA and length'
         // #submit_button_3 is for 'analyze words for Levenshtein Distance'
@@ -48,15 +53,26 @@
     </script>
 </head>
 <body>
-    <h1>Nonce Words Data Parser (currently undergoing changes)</h1>
+    <h1>Nonce Words Data Parser</h1>
+    <a href="javascript:void(0);" id="background_toggle">Background</a>
+    <div id="background_area" class="instructions" style="width:600px; display:none">
+        <li>
+            RSA is "right-side advantage": <br># of letters from right side of keyboard - # of letters from left side of keyboard
+        </li>
+        <li>
+            Left-side letters: ['q','w','e','r','t','a','s','d','f','g','z','x','c','y','b']<br>
+            Right-side letters:  ['y','u','i','o','p','h','j','k','l','n','m']
+        </li>
+    </div>
+
     <hr>
-    <div id="content" class="myborder">
+    <div id="content" class="">
         <!--Area 1-->
-        <div id="area_1" class="analysis_area myborder">
+        <div id="area_1" class="analysis_area">
             <span class="analysis_area_title">Analyze 1 word for RSA and Length</span>
             <br>
             <a href="javascript:void(0);" id="instructions__toggle_1">Instructions</a>
-            <div id="instructions_1" class="myborder instructions" style="display:none">
+            <div id="instructions_1" class="instructions" style="display:none">
                 Example input:
                 <pre>
 hugged
@@ -64,8 +80,12 @@ smiled
 picked on
 helped
                 </pre>
-                Example output:
+                Example output: <br>(word, RSA, length)
                 <pre>
+hugged,-2,6
+smiled,0,6
+picked on,2,8
+helped,0,6
                 </pre>
             </div>
 
@@ -77,11 +97,11 @@ helped
         </div>
         <hr>
         <!--Area 2-->
-        <div id="area_2" class="analysis_area myborder">
+        <div id="area_2" class="analysis_area">
             <span class="analysis_area_title">Analyze 2 words for RSA and Length</span>
             <br>
             <a href="javascript:void(0);" id="instructions__toggle_2">Instructions</a>
-            <div id="instructions_2" class="myborder instructions" style="display:none">
+            <div id="instructions_2" class="instructions" style="display:none">
                 Example input:
                 <pre>
 stoofed, hugged
@@ -89,7 +109,7 @@ jorred, smiled
 ludded, picked on
 itched, helped
                 </pre>
-                Example output:
+                Example output: <br>(word1, RSA1, length1, word2, RSA2, length2, RSA1-RSA2)
                 <pre>
 stoofed,-3,7,hugged,-2,6,-1
 jorred,-2,6,smiled,0,6,-2
