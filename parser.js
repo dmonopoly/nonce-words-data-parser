@@ -1,6 +1,6 @@
 // Global var
 var DELIMITER = ",";
-var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','y','b'];
+var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
 function transform1ColumnForRSAAndLength(text) {
@@ -96,7 +96,6 @@ function _computeRSA(word) {
 		if (_include(LEFT_LETTERS, word[i])) {
 			leftCount++;
 		} 
-		// Separate into different if-statements since 'y' is both a left and a right letter, so we may have to count it twice
 		if (_include(RIGHT_LETTERS, word[i])) {
 			rightCount++;
 		}
