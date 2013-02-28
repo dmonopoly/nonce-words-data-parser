@@ -95,7 +95,9 @@ function _computeRSA(word) {
 	for (var i=0; i<word.length; i++) {
 		if (_include(LEFT_LETTERS, word[i])) {
 			leftCount++;
-		} else if (_include(RIGHT_LETTERS, word[i])) {
+		} 
+		// Separate into different if-statements since 'y' is both a left and a right letter, so we may have to count it twice
+		if (_include(RIGHT_LETTERS, word[i])) {
 			rightCount++;
 		}
 	}
