@@ -18,7 +18,7 @@
         // #submit_button_3 is for 'analyze words for Levenshtein Distance'
 
         // todo: area_1 and 3 stuff
-        /* area_1 things*/
+        /* area_1 things */
         $("#instructions__toggle_1").click(function() {
             $("#instructions_1").toggle();
         });
@@ -34,7 +34,7 @@
             }
         });
 
-        /* area_2 things*/
+        /* area_2 things */
         $("#instructions__toggle_2").click(function() {
             $("#instructions_2").toggle();
         });
@@ -49,6 +49,23 @@
                 $("#output_area_2").val(output);
             }
         });
+
+        /* area_3 things */
+        $("#instructions__toggle_3").click(function() {
+            $("#instructions_3").toggle();
+        });
+        $("#submit_button_3").click(function() {
+            var QUICK_TEST = false;
+            if (QUICK_TEST) {
+                // testSpaceRemoval();
+                // testIncludeMethod();
+            } else {
+                var text = $("#input_area_3").val();
+                var output = transform1ColumnForLevDist(text);
+                $("#output_area_3").val(output);
+            }
+        });
+
     });
     </script>
 </head>
@@ -66,10 +83,10 @@
     </div>
 
     <hr>
-    <div id="content" class="">
+    <div id="content">
         <!--Area 1-->
         <div id="area_1" class="analysis_area">
-            <span class="analysis_area_title">Analyze 1 word for RSA and Length</span>
+            <span class="analysis_area_title">RSA and Length (1 column of words)</span>
             <br>
             <a href="javascript:void(0);" id="instructions__toggle_1">Instructions</a>
             <div id="instructions_1" class="instructions" style="display:none">
@@ -98,7 +115,7 @@ helped,0,6
         <hr>
         <!--Area 2-->
         <div id="area_2" class="analysis_area">
-            <span class="analysis_area_title">Analyze 2 words for RSA and Length</span>
+            <span class="analysis_area_title">RSA and Length (2 columns of words)</span>
             <br>
             <a href="javascript:void(0);" id="instructions__toggle_2">Instructions</a>
             <div id="instructions_2" class="instructions" style="display:none">
@@ -122,6 +139,33 @@ itched,-2,6,helped,0,6,-2
                 <textarea id="input_area_2" placeholder="Edit me" cols="30" rows="15"></textarea><br>
                 <input id="submit_button_2" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
                 <textarea id="output_area_2" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>    
+            </div>
+        </div>
+        <hr>
+        <!--Area 3-->
+        <div id="area_3" class="analysis_area">
+            <span class="analysis_area_title">Levenshtein Distance (2 columns of words)</span>
+            <br>
+            <a href="javascript:void(0);" id="instructions__toggle_3">Instructions</a>
+            <div id="instructions_3" class="instructions" style="display:none">
+                Example input:
+                <pre>
+hugged, hoped
+smiled, smacked
+helped, held
+                </pre>
+                Example output: <br>(word1, word2, Levenshtein Distance)
+                <pre>
+hugged,hoped,3
+smiled,smacked,3
+helped,held,2
+                </pre>
+            </div>
+
+            <div>
+                <textarea id="input_area_3" placeholder="Edit me" cols="30" rows="15"></textarea><br>
+                <input id="submit_button_3" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
+                <textarea id="output_area_3" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>    
             </div>
         </div>
     </div>
