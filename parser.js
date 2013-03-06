@@ -3,6 +3,12 @@ var DELIMITER = ",";
 var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
+function gatherOutputMatching(text) {
+	// quick hack to match our data with mech. turks
+	// prints data in order from lowest lev dist
+	// next step
+}
+
 function transform1ColumnForLevDist(text) {
 	// console.log("Input: \n"+text);
 	text = text.trim();

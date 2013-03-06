@@ -16,6 +16,7 @@
         // #submit_button_1 is for 'analyze 1 word for RSA and length'
         // #submit_button_2 is for 'analyze 2 words for RSA and length'
         // #submit_button_3 is for 'analyze words for Levenshtein Distance'
+        // #submit_button_x is for quick hacks..
 
         // todo: area_1 and 3 stuff
         /* area_1 things */
@@ -66,6 +67,21 @@
             }
         });
 
+        /* area_x things */
+        // $("#instructions__toggle_x").click(function() {
+        //     $("#instructions_x").toggle();
+        // });
+        $("#submit_button_x").click(function() {
+            var QUICK_TEST = false;
+            if (QUICK_TEST) {
+                // testSpaceRemoval();
+                // testIncludeMethod();
+            } else {
+                var text = $("#input_area_x").val();
+                var output = gatherOutputMatching(text);
+                $("#output_area_x").val(output);
+            }
+        });
     });
     </script>
 </head>
@@ -166,6 +182,18 @@ helped,held,2
                 <textarea id="input_area_3" placeholder="Edit me" cols="30" rows="15"></textarea><br>
                 <input id="submit_button_3" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
                 <textarea id="output_area_3" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>    
+            </div>
+        </div>
+
+        <!--Area 4-->
+        <div id="area_4" class="analysis_area">
+            <span class="analysis_area_title">Quick matching of our data (misc.)</span>
+            <br>
+            
+            <div>
+                <textarea id="input_area_x" placeholder="Edit me" cols="30" rows="15"></textarea><br>
+                <input id="submit_button_x" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
+                <textarea id="output_area_x" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>    
             </div>
         </div>
     </div>
