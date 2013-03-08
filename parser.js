@@ -3,10 +3,42 @@ var DELIMITER = ",";
 var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 
-function gatherOutputMatching(text) {
-	// quick hack to match our data with mech. turks
-	// prints data in order from lowest lev dist
+function gatherOutputMatching(ourData, theirData) {
 	// next step
+
+	var ourWords = ourData.split(/[,\n\t]/);
+	var theirWords = theirData.split(/[,\n\t]/);
+
+	var rows = Array();
+
+	for (var i=0; i<ourWords.length; i++) {
+		var rowForOneWord = Array();
+		// For each of our words, match with all of the others
+		for (var j=0; j<theirWords.length; j++) {
+			console.log("Matching "+ourWords[i]+" with "+theirWords[j]);
+			var dist = _computeLevDist(ourWords[i], theirWords[j]);
+			if (dist == 0) { // perfect match, so stop
+				console.log("   0!");
+				rowForOneWord.length = 0; // clear
+				rowForOneWord.push(ourWords[i] + DELIMITER + theirWords[j] + DELIMITER + dist);
+				// rowForOneWord.push(ourWords[i]);
+				// rowForOneWord.push(theirWords[j]);
+				// rowForOneWord.push(dist);
+				break;
+			} else { // otherwise, append result to an output list
+				console.log("   not 0");
+				rowForOneWord.push(ourWords[i] + DELIMITER + theirWords[j] + DELIMITER + dist);
+			}
+			rowForOneWord[rowForOneWord.length-1] += "\n";
+		}
+		console.log("row for one word: "+rowForOneWord);
+		rows.push(rowForOneWord);
+		console.log("rows 1: "+rows);
+	}
+	console.log("Final: "+rows);
+
+	var result = _flattenArrayByDelimiter(rows, '\n');
+	return result;
 }
 
 function transform1ColumnForLevDist(text) {
