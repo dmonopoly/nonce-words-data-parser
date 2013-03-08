@@ -12,33 +12,50 @@ function gatherOutputMatching(ourData, theirData) {
 	var rows = Array();
 
 	for (var i=0; i<ourWords.length; i++) {
-		var rowForOneWord = Array();
+		var rowsForOneWord = Array(); // has multiple rows; the final thing added to the rows object
+		// this object contains entries like rowsForOneWord[0] = [[joy],[jog],[1]], rowsForOneWord[1] = [[joy],[toy],[1]]
+		
 		// For each of our words, match with all of the others
 		for (var j=0; j<theirWords.length; j++) {
-			console.log("Matching "+ourWords[i]+" with "+theirWords[j]);
-			var dist = _computeLevDist(ourWords[i], theirWords[j]);
-			if (dist == 0) { // perfect match, so stop
-				console.log("   0!");
-				rowForOneWord.length = 0; // clear
-				rowForOneWord.push(ourWords[i] + DELIMITER + theirWords[j] + DELIMITER + dist);
-				// rowForOneWord.push(ourWords[i]);
-				// rowForOneWord.push(theirWords[j]);
-				// rowForOneWord.push(dist);
-				break;
-			} else { // otherwise, append result to an output list
-				console.log("   not 0");
-				rowForOneWord.push(ourWords[i] + DELIMITER + theirWords[j] + DELIMITER + dist);
-			}
-			rowForOneWord[rowForOneWord.length-1] += "\n";
-		}
-		console.log("row for one word: "+rowForOneWord);
-		rows.push(rowForOneWord);
-		console.log("rows 1: "+rows);
-	}
-	console.log("Final: "+rows);
+			var rowForOneWord = Array();
 
+			// console.log("--Matching "+ourWords[i]+" with "+theirWords[j]);
+			var dist = _computeLevDist(ourWords[i], theirWords[j]);
+			// Fill up the single rowForOneWord each time
+			rowForOneWord.push(ourWords[i]);
+			rowForOneWord.push(theirWords[j]);
+			rowForOneWord.push(dist);
+
+			if (dist == 0) { // perfect match, so clear rowsForOneWord and just let it have this one row
+				// console.log("   perfect match");
+				rowsForOneWord.length = 0; // clear
+				rowsForOneWord.push(rowForOneWord);
+				break;
+			} else { // otherwise, append result to list of possible rows
+				// console.log("   not perfect match");
+				rowsForOneWord.push(rowForOneWord);
+			}
+			// console.log("  new rowForOneWord: "+rowForOneWord);
+			// console.log("this thing: "+rowForOneWord[rowForOneWord.length-1])
+		}
+		// console.log("Final rowsForOneWord for the word '"+ourWords[i]+"': \n"+rowsForOneWord);
+		
+		// Sort the rowsForOneWord by lowest lev dist first
+		rowsForOneWord.sort(myComparator);
+
+		rows.push(_flattenArrayByDelimiter(rowsForOneWord, '\n'));
+		// console.log("Ultimate rows list is now this: \n"+rows);
+	}
+	// console.log("Final rows list, right before flattening: \n"+rows);
 	var result = _flattenArrayByDelimiter(rows, '\n');
 	return result;
+}
+
+// used within gatherOutputMatching to sort rows for one word by lev dist
+// a, b are entries of the multi-dimensional array, rowsForOneWord
+function myComparator(a,b) {
+	// a[2] is lev dist of a, b[2] likewise
+	return parseInt(a[2]) - parseInt(b[2]);
 }
 
 function transform1ColumnForLevDist(text) {
