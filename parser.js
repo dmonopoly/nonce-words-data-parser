@@ -2,6 +2,7 @@
 var DELIMITER = ",";
 var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
+var MAX_LEV_DIST = 4; // max lev dist that we care about
 
 function gatherOutputMatching(ourData, theirData) {
 	// next step
@@ -31,7 +32,7 @@ function gatherOutputMatching(ourData, theirData) {
 				rowsForOneWord.length = 0; // clear
 				rowsForOneWord.push(rowForOneWord);
 				break;
-			} else { // otherwise, append result to list of possible rows
+			} else if (dist <= MAX_LEV_DIST) { // otherwise, append result to list of possible rows, given dist is small enough
 				// console.log("   not perfect match");
 				rowsForOneWord.push(rowForOneWord);
 			}
@@ -40,10 +41,12 @@ function gatherOutputMatching(ourData, theirData) {
 		}
 		// console.log("Final rowsForOneWord for the word '"+ourWords[i]+"': \n"+rowsForOneWord);
 		
-		// Sort the rowsForOneWord by lowest lev dist first
-		rowsForOneWord.sort(myComparator);
+		if (rowsForOneWord.length != 0) {
+			// Sort the rowsForOneWord by lowest lev dist first
+			rowsForOneWord.sort(myComparator);
 
-		rows.push(_flattenArrayByDelimiter(rowsForOneWord, '\n'));
+			rows.push(_flattenArrayByDelimiter(rowsForOneWord, '\n'));
+		}
 		// console.log("Ultimate rows list is now this: \n"+rows);
 	}
 	// console.log("Final rows list, right before flattening: \n"+rows);
@@ -75,7 +78,7 @@ function transform1ColumnForLevDist(text) {
 		// inputRow[0] -> first word
 		// inputRow[1] -> second word
 		_trim(inputRow);
-		console.log("Trimmed Output 2: ("+inputRow[0]+")("+inputRow[1]+")");
+		// console.log("Trimmed Output 2: ("+inputRow[0]+")("+inputRow[1]+")");
 		rows.push(_generateLevDist(inputRow[0], inputRow[1]));
 	}
 	// test
@@ -207,7 +210,7 @@ function _countLetters(word) {
 // Combines elements of array into a string, separating each element with delimiter. 
 function _flattenArrayByDelimiter(array, delimiter) {
 	var result = ""; // a string
-	console.log("Flattening array");
+	// console.log("Flattening array");
 	for (var i=0; i<array.length-1; i++) {
 		result += array[i] + delimiter;
 	}
