@@ -4,9 +4,9 @@ var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b']
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
 var MAX_LEV_DIST = 4; // max lev dist that we care about
 
+// Solely for "Quick matching for our data"
 function gatherOutputMatching(ourData, theirData) {
-	// next step
-
+	// Split around any new line, tab, or comma
 	var ourWords = ourData.split(/[,\n\t]/);
 	var theirWords = theirData.split(/[,\n\t]/);
 
@@ -20,22 +20,26 @@ function gatherOutputMatching(ourData, theirData) {
 		for (var j=0; j<theirWords.length; j++) {
 			var rowForOneWord = Array();
 
-			// console.log("--Matching "+ourWords[i]+" with "+theirWords[j]);
-			var dist = _computeLevDist(ourWords[i], theirWords[j]);
-			// Fill up the single rowForOneWord each time
-			rowForOneWord.push(ourWords[i]);
-			rowForOneWord.push(theirWords[j]);
-			rowForOneWord.push(dist);
+			// Only compute lev dist if our word and their word have same beginnings, ~75% equal
+			if (beginningOfWordsCloseEnough(ourWords[i], theirWords[j])) {
+				// console.log("--Matching "+ourWords[i]+" with "+theirWords[j]);
+				var dist = _computeLevDist(ourWords[i], theirWords[j]);
+				// Fill up the single rowForOneWord each time
+				rowForOneWord.push(ourWords[i]);
+				rowForOneWord.push(theirWords[j]);
+				rowForOneWord.push(dist);
 
-			if (dist == 0) { // perfect match, so clear rowsForOneWord and just let it have this one row
-				// console.log("   perfect match");
-				rowsForOneWord.length = 0; // clear
-				rowsForOneWord.push(rowForOneWord);
-				break;
-			} else if (dist <= MAX_LEV_DIST) { // otherwise, append result to list of possible rows, given dist is small enough
-				// console.log("   not perfect match");
-				rowsForOneWord.push(rowForOneWord);
+				if (dist == 0) { // perfect match, so clear rowsForOneWord and just let it have this one row
+					// console.log("   perfect match");
+					rowsForOneWord.length = 0; // clear
+					rowsForOneWord.push(rowForOneWord);
+					break;
+				} else if (dist <= MAX_LEV_DIST) { // otherwise, append result to list of possible rows, given dist is small enough
+					// console.log("   not perfect match");
+					rowsForOneWord.push(rowForOneWord);
+				}
 			}
+
 			// console.log("  new rowForOneWord: "+rowForOneWord);
 			// console.log("this thing: "+rowForOneWord[rowForOneWord.length-1])
 		}
@@ -50,8 +54,40 @@ function gatherOutputMatching(ourData, theirData) {
 		// console.log("Ultimate rows list is now this: \n"+rows);
 	}
 	// console.log("Final rows list, right before flattening: \n"+rows);
-	var result = _flattenArrayByDelimiter(rows, '\n');
-	return result;
+	if (rows.length == 0)
+		return 'no matches'
+	else {
+		var result = _flattenArrayByDelimiter(rows, '\n');
+		return result;
+	}
+}
+
+// used within gatherOutputMatching to determine if 2 words are close enough to warrant doing a lev dist analysis
+// reasoning: before, we got output like drifted,advised,4 as remotely related - but this does not need eyes to see they are very different.
+function beginningOfWordsCloseEnough(word1, word2) {
+	var count = 0; // if this reaches a certain num, then the words are quite equal and most likely are something like 'drift', 'drifted' or 'sleep', 'slept'
+	
+	// If either word contains the other word
+	var pattern1 = new RegExp('\b'+word1,''); // word boundary + actual word to match
+	var pattern2 = new RegExp('\b'+word2,'');
+	if (word1.match(pattern2) || word2.match(pattern1))
+		return true;
+
+	for (var i=0; i<word1.length; i++) {
+		if (word2[i] === undefined)
+			break;
+		else if (word1[i] === word2[i]) {
+			count++;
+		} else {
+			break; 
+		}
+	}
+
+	// if we have found some number of letters matching
+	if (count >= 3)
+		return true;
+	else
+		return false;
 }
 
 // used within gatherOutputMatching to sort rows for one word by lev dist
@@ -229,7 +265,7 @@ function _trim(myArray) {
 	// console.log("Trimmed Output 1: ("+myArray[0]+")("+myArray[1]+")");
 }
 
-// Return true if array contains the object
+// Returns true if array contains the object
 function _include(arr, obj) {
     return (arr.indexOf(obj) != -1);
 }
@@ -288,6 +324,12 @@ function _computeLevDist(s, t) {
 }
 
 /* Test methods */
+function testCloseEnough() {
+	var w1 = 'love';
+	var w2 = 'loving';
+	console.log("close enough? "+beginningOfWordsCloseEnough(w1,w2));
+}
+
 function testIncludeMethod() {
 	var word = 'myword'
 	var result = _include(LEFT_LETTERS, word[0]);
