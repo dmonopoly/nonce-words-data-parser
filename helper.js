@@ -1,4 +1,5 @@
-/** Helper methods for main.js **/
+/** Helper methods solely for main.js, test.js, verbs_reader.js **/
+
 // used within gatherOutputMatching to determine if 2 words are close enough to warrant doing a lev dist analysis
 // reasoning: before, we got output like drifted,advised,4 as remotely related - but this does not need eyes to see they are very different.
 function _beginningOfWordsCloseEnough(word1, word2) {

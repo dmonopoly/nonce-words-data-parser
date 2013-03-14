@@ -11,7 +11,10 @@ function gatherOutputMatching(ourData, theirData) {
 	// Split around any new line, tab, or comma
 	var ourWords = ourData.split(/[,\n\t]/);
 	var theirWords = theirData.split(/[,\n\t]/);
+	_trim(ourWords);
+	_trim(theirWords);
 
+	var reader = new VerbReader();
 	var rows = Array();
 
 	for (var i=0; i<ourWords.length; i++) {
@@ -22,8 +25,17 @@ function gatherOutputMatching(ourData, theirData) {
 		for (var j=0; j<theirWords.length; j++) {
 			var rowForOneWord = Array();
 
+			// Want to do:
+			// if our word and their word are both in the reader and are conjugates of the same verb
+			if (reader.containsWord(ourWords[i]) && reader.containsWord(theirWords[j]) && reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
+				rowForOneWord.push(ourWords[i]);
+				rowForOneWord.push(theirWords[j]);
+				rowForOneWord.push(0); // 'perfect' match (verbs are essentially the same)
+				rowsForOneWord.push(rowForOneWord);
+				break;
+			}
 			// Only compute lev dist if our word and their word have same beginnings, ~75% equal
-			if (_beginningOfWordsCloseEnough(ourWords[i], theirWords[j])) {
+			else if (_beginningOfWordsCloseEnough(ourWords[i], theirWords[j])) {
 				// console.log("--Matching "+ourWords[i]+" with "+theirWords[j]);
 				var dist = _computeLevDist(ourWords[i], theirWords[j]);
 				// Fill up the single rowForOneWord each time
