@@ -27,7 +27,8 @@ function gatherOutputMatching(ourData, theirData) {
 
 			// Want to do:
 			// if our word and their word are both in the reader and are conjugates of the same verb
-			if (reader.containsWord(ourWords[i]) && reader.containsWord(theirWords[j]) && reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
+			// if (reader.containsWord(ourWords[i]) && reader.containsWord(theirWords[j]) && reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
+			if (reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
 				rowForOneWord.push(ourWords[i]);
 				rowForOneWord.push(theirWords[j]);
 				rowForOneWord.push(0); // 'perfect' match (verbs are essentially the same)

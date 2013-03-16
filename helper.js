@@ -3,14 +3,13 @@
 // used within gatherOutputMatching to determine if 2 words are close enough to warrant doing a lev dist analysis
 // reasoning: before, we got output like drifted,advised,4 as remotely related - but this does not need eyes to see they are very different.
 function _beginningOfWordsCloseEnough(word1, word2) {
-	var count = 0; // if this reaches a certain num, then the words are quite equal and most likely are something like 'drift', 'drifted' or 'sleep', 'slept'
-	
 	// If either word contains the other word
 	var pattern1 = new RegExp('\b'+word1,''); // word boundary + actual word to match
 	var pattern2 = new RegExp('\b'+word2,'');
 	if (word1.match(pattern2) || word2.match(pattern1))
 		return true;
 
+	var count = 0; // if this reaches a certain num, then the words are quite equal and most likely are something like 'drift', 'drifted' or 'sleep', 'slept'
 	for (var i=0; i<word1.length; i++) {
 		if (word2[i] === undefined)
 			break;
