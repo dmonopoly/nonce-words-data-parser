@@ -37,14 +37,14 @@ def gather_output_matching(our_words, their_words):
 		rows_for_one_word = []
 		for their_word in their_words:
 			row_for_one_word = []
-			print '1 '+our_word
-			print '2 '+their_word
+			# print '1 '+our_word
+			# print '2 '+their_word
 			if reader.verbs_are_conjugates(our_word, their_word):
 				row_for_one_word.extend([our_word])
 				row_for_one_word.extend([their_word])
 				row_for_one_word.extend([0]) # symbol for perfect match
 				rows_for_one_word.extend([row_for_one_word])
-				print 'rfow: '+str(rows_for_one_word)
+				# print 'rfow: '+str(rows_for_one_word)
 				break
 			elif beg_of_words_close_enough(our_word, their_word):
 				dist = lev_dist(our_word, their_word)
@@ -64,15 +64,16 @@ def gather_output_matching(our_words, their_words):
 			# rows_for_one_word = rows_for_one_word.sort(my_comparator)
 			rows_for_one_word.sort(my_comparator)
 			# print 'this: '+str(rows_for_one_word)
-			rows.extend(flatten_array_by_delim(rows_for_one_word, '\n'))
+			rows.append(flatten_array_by_delim(rows_for_one_word, '\n'))
 
 	if len(rows) == 0:
 		print 'no matches'
 	else:
-		print 'rows before: '+str(rows)
+		# print 'rows before: '+str(rows)
+		print '--RESULT--'
 		result = flatten_array_by_delim(rows, '\n')
-		print str(result)
-
+		cleaned_result = re.sub(r'[\[ \]\']', '', str(result))
+		print str(cleaned_result)
 
 # Trim each word in list of words
 def trim(words):

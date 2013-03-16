@@ -9,8 +9,8 @@ class VerbReader:
 
 	def verbs_are_conjugates(self, word1, word2):
 		if (word1 in self.word_map and word2 in self.word_map):
-			print '3 '+str(self.word_map[word1])
-			print '4 '+str(self.word_map[word2])
+			# print '3 '+str(self.word_map[word1])
+			# print '4 '+str(self.word_map[word2])
 			if (self.word_map[word1] == self.word_map[word2]):
 				return True
 			else:

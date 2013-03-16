@@ -20,11 +20,10 @@ def lev_dist(a,b):
             
     return current[n]
 
+# Pre: words already determined to not be irregular conjugates of each other
 def beg_of_words_close_enough(word1, word2):
-	pattern1 = re.compile('\b'+word1)
-	pattern2 = re.compile('\b'+word2)
-	either_word_contains_the_other = pattern2.match(word1) and pattern1.match(word2)
-	if either_word_contains_the_other:
+	if either_word_contains_the_other(word1, word2):
+		print '1 word has other in it'
 		return True
 
 	count = 0
@@ -38,6 +37,29 @@ def beg_of_words_close_enough(word1, word2):
 		return True
 	else:
 		return False
+
+def either_word_contains_the_other(w1, w2):
+	# if re.match(r''+word1+'$')
+	# If a word contains it simply, like kick and kicked
+	pattern1 = re.compile(r'\b'+w1)
+	pattern2 = re.compile(r'\b'+w2)
+	either_word_contains_the_other = pattern2.match(w1) or pattern1.match(w2)
+	if either_word_contains_the_other:
+		return True
+
+	# Try checking for ing or ed at end in both, and reduce one to 
+	patt_ing = re.compile(r'ing\b')
+	patt_ed = re.compile(r'ed\b')
+	w1 = re.sub(patt_ing, '', w1)
+	w1 = re.sub(patt_ed, '', w1)
+	w2 = re.sub(patt_ing, '', w2)
+	w2 = re.sub(patt_ed, '', w2)
+	print 'w1: '+w1
+	print 'w2: '+w2
+
+	either_word_contains_the_other = w1 == w2
+
+	return either_word_contains_the_other
 
 # Combines elements of array into a string, separating each element with delimiter. 
 def flatten_array_by_delim(array, delimiter):

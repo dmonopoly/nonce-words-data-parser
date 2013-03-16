@@ -1,5 +1,5 @@
 run
 fly
-sink
+jumping
 win
 play
