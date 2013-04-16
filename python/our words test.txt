@@ -1,5 +1,0 @@
-run
-fly
-jumping
-win
-play
