@@ -13,3 +13,6 @@ Assumes a decent web browser.
 
 ## Little things not taken of
 Technically verb reader does not deal with the slash yet as in "was/were"
+
+## Next step
+Discuss removing words like single letter 'g' from given test data

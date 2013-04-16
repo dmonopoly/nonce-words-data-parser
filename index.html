@@ -20,11 +20,11 @@
         // #submit_button_1 is for 'analyze 1 word for RSA and length'
         // #submit_button_2 is for 'analyze 2 words for RSA and length'
         // #submit_button_3 is for 'analyze words for Levenshtein Distance'
-        // #submit_button_x_1 is for quick hacks: currently, just 'Quick matching for our data'
+        // #submit_button_4 is for getting left-edge distance
 
         // todo: area_1 and 3 stuff
         /* area_1 things */
-        $("#instructions__toggle_1").click(function() {
+        $("#instructions_toggle_1").click(function() {
             $("#instructions_1").toggle();
         });
         $("#submit_button_1").click(function() {
@@ -40,7 +40,7 @@
         });
 
         /* area_2 things */
-        $("#instructions__toggle_2").click(function() {
+        $("#instructions_toggle_2").click(function() {
             $("#instructions_2").toggle();
         });
         $("#submit_button_2").click(function() {
@@ -56,7 +56,7 @@
         });
 
         /* area_3 things */
-        $("#instructions__toggle_3").click(function() {
+        $("#instructions_toggle_3").click(function() {
             $("#instructions_3").toggle();
         });
         $("#submit_button_3").click(function() {
@@ -71,20 +71,19 @@
             }
         });
 
-        /* area_x things */
-        // $("#instructions__toggle_x").click(function() {
-        //     $("#instructions_x").toggle();
-        // });
-        $("#submit_button_x").click(function() {
+        /* area_4 things */
+        $("#instructions_toggle_4").click(function() {
+            $("#instructions_4").toggle();
+        });
+        $("#submit_button_4").click(function() {
             var QUICK_TEST = false;
             if (QUICK_TEST) {
                 testCloseEnough();
             } else {
-                var text1 = $("#input_area_x_1").val(); // our data
-                var text2 = $("#input_area_x_2").val(); // their data
+                var text1 = $("#input_area_4").val();
 
-                var output = gatherOutputMatching(text1, text2);
-                $("#output_area_x").val(output);
+                var output = getLeftEdgeDist(text1);
+                $("#output_area_4").val(output);
             }
         });
     });
@@ -95,12 +94,43 @@
     <a href="javascript:void(0);" id="background_toggle">Background</a>
     <div id="background_area" class="instructions" style="width:600px; display:none">
         <li>
-            RSA is "right-side advantage": <br># of letters from right side of keyboard - # of letters from left side of keyboard
+            <b>RSA</b> is "right-side advantage": <br># of letters from right side of keyboard - # of letters from left side of keyboard
         </li>
         <li>
             Left-side letters: ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b']<br>
             Right-side letters:  ['y','u','i','o','p','h','j','k','l','n','m']
         </li>
+        <br>
+        <li>
+            <b>LED</b> is "left-edge distance", as counted from left edge of keyboard (using <a href="http://en.wikipedia.org/wiki/File:Qwerty.svg">this</a>) <br>
+            We define the LED of a word to be the sum of the LEDs of that word's individual letters.<br>
+        </li>
+            'a',2,<br>
+            'b',6,<br>
+            'c',4,<br>
+            'd',4,<br>
+            'e',4,<br>
+            'f',5,<br>
+            'g',6,<br>
+            'h',7,<br>
+            'i',9,<br>
+            'j',8,<br>
+            'k',9,<br>
+            'l',10,<br>
+            'm',8,<br>
+            'n',7,<br>
+            'o',10,<br>
+            'p',11,<br>
+            'q',2,<br>
+            'r',5,<br>
+            's',3,<br>
+            't',6,<br>
+            'u',8,<br>
+            'v',5,<br>
+            'w',3,<br>
+            'x',3,<br>
+            'y',7,<br>
+            'z',2
     </div>
 
     <hr>
@@ -109,7 +139,7 @@
         <div id="area_1" class="analysis_area">
             <span class="analysis_area_title">RSA and Length (1 column of words)</span>
             <br>
-            <a href="javascript:void(0);" id="instructions__toggle_1">Instructions</a>
+            <a href="javascript:void(0);" id="instructions_toggle_1">Instructions</a>
             <div id="instructions_1" class="instructions" style="display:none">
                 Example input:
                 <pre>
@@ -138,7 +168,7 @@ helped,0,6
         <div id="area_2" class="analysis_area">
             <span class="analysis_area_title">RSA and Length (2 columns of words)</span>
             <br>
-            <a href="javascript:void(0);" id="instructions__toggle_2">Instructions</a>
+            <a href="javascript:void(0);" id="instructions_toggle_2">Instructions</a>
             <div id="instructions_2" class="instructions" style="display:none">
                 Example input:
                 <pre>
@@ -167,7 +197,7 @@ itched,-2,6,helped,0,6,-2
         <div id="area_3" class="analysis_area">
             <span class="analysis_area_title">Levenshtein Distance (2 columns of words)</span>
             <br>
-            <a href="javascript:void(0);" id="instructions__toggle_3">Instructions</a>
+            <a href="javascript:void(0);" id="instructions_toggle_3">Instructions</a>
             <div id="instructions_3" class="instructions" style="display:none">
                 Example input:
                 <pre>
@@ -192,13 +222,27 @@ helped,held,2
         <hr>
         <!--Area 4-->
         <div id="area_4" class="analysis_area">
-            <span class="analysis_area_title">Quick matching of our data (misc.)</span>
+            <span class="analysis_area_title">Left-edge distance (LED)</span>
             <br>
+            <a href="javascript:void(0);" id="instructions_toggle_4">Instructions</a>
+            <div id="instructions_4" class="instructions" style="display:none">
+                Example input:
+                <pre>
+hugged
+smiled
+helped
+                </pre>
+                Example output: <br>(word, LED, LED &divide; letter count of word)
+                <pre>
+hugged,35,5.833333333333333
+smiled,38,6.333333333333333
+helped,40,6.666666666666667
+                </pre>
+            </div>
             <div>
-                <textarea id="input_area_x_1" placeholder="Insert OUR data" cols="30" rows="15"></textarea><br>
-                <textarea id="input_area_x_2" placeholder="Insert THEIR data" cols="30" rows="15"></textarea><br>
-                <input id="submit_button_x" type="submit" value="Submit"><br><!--alternative is onclick="parse()"-->
-                <textarea id="output_area_x" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>
+                <textarea id="input_area_4" placeholder="Edit me" cols="30" rows="15"></textarea><br>
+                <input id="submit_button_4" type="submit" value="Submit"><br>
+                <textarea id="output_area_4" readonly placeholder="Output will be here" cols="50" rows="15"></textarea><br>
             </div>
         </div>
     </div>

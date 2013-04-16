@@ -4,79 +4,65 @@
 var DELIMITER = ",";
 var LEFT_LETTERS = ['q','w','e','r','t','a','s','d','f','g','z','x','c','v','b'];
 var RIGHT_LETTERS = ['y','u','i','o','p','h','j','k','l','n','m'];
-var MAX_LEV_DIST = 4; // max lev dist that we care about
 
-// Solely for "Quick matching for our data"
-function gatherOutputMatching(ourData, theirData) {
-	// Split around any new line, tab, or comma
-	var ourWords = ourData.split(/[,\n\t]/);
-	var theirWords = theirData.split(/[,\n\t]/);
-	_trim(ourWords);
-	_trim(theirWords);
+// left-edge distance; letter at index i has LED stored in i+1
+var LED_MAP = [
+	'a',2,
+	'b',6,
+	'c',4,
+	'd',4,
+	'e',4,
+	'f',5,
+	'g',6,
+	'h',7,
+	'i',9,
+	'j',8,
+	'k',9,
+	'l',10,
+	'm',8,
+	'n',7,
+	'o',10,
+	'p',11,
+	'q',2,
+	'r',5,
+	's',3,
+	't',6,
+	'u',8,
+	'v',5,
+	'w',3,
+	'x',3,
+	'y',7,
+	'z',2
+]
 
-	var reader = new VerbReader();
-	var rows = Array();
+// area 4
+function getLeftEdgeDist(text) {
+	text = text.trim();
 
-	for (var i=0; i<ourWords.length; i++) {
-		var rowsForOneWord = Array(); // has multiple rows; the final thing added to the rows object
-		// this object contains entries like rowsForOneWord[0] = [[joy],[jog],[1]], rowsForOneWord[1] = [[joy],[toy],[1]]
-		
-		// For each of our words, match with all of the others
-		for (var j=0; j<theirWords.length; j++) {
-			var rowForOneWord = Array();
+	var lines = text.split("\n");
+	var numLines = lines.length;
 
-			// Want to do:
-			// if our word and their word are both in the reader and are conjugates of the same verb
-			// if (reader.containsWord(ourWords[i]) && reader.containsWord(theirWords[j]) && reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
-			if (reader.verbsAreConjugates(ourWords[i], theirWords[j])) {
-				rowForOneWord.push(ourWords[i]);
-				rowForOneWord.push(theirWords[j]);
-				rowForOneWord.push(0); // 'perfect' match (verbs are essentially the same)
-				rowsForOneWord.push(rowForOneWord);
-				break;
-			}
-			// Only compute lev dist if our word and their word have same beginnings, ~75% equal
-			else if (_beginningOfWordsCloseEnough(ourWords[i], theirWords[j])) {
-				// console.log("--Matching "+ourWords[i]+" with "+theirWords[j]);
-				var dist = _computeLevDist(ourWords[i], theirWords[j]);
-				// Fill up the single rowForOneWord each time
-				rowForOneWord.push(ourWords[i]);
-				rowForOneWord.push(theirWords[j]);
-				rowForOneWord.push(dist);
+	// resultant rows - 
+	var rows = Array(); // can do rows.push(element)
 
-				if (dist == 0) { // perfect match, so clear rowsForOneWord and just let it have this one row
-					// console.log("   perfect match");
-					rowsForOneWord.length = 0; // clear
-					rowsForOneWord.push(rowForOneWord);
-					break;
-				} else if (dist <= MAX_LEV_DIST) { // otherwise, append result to list of possible rows, given dist is small enough
-					// console.log("   not perfect match");
-					rowsForOneWord.push(rowForOneWord);
-				}
-			}
-
-			// console.log("  new rowForOneWord: "+rowForOneWord);
-			// console.log("this thing: "+rowForOneWord[rowForOneWord.length-1])
-		}
-		// console.log("Final rowsForOneWord for the word '"+ourWords[i]+"': \n"+rowsForOneWord);
-		
-		if (rowsForOneWord.length != 0) {
-			// Sort the rowsForOneWord by lowest lev dist first
-			rowsForOneWord.sort(_myComparator);
-
-			rows.push(_flattenArrayByDelimiter(rowsForOneWord, '\n'));
-		}
-		// console.log("Ultimate rows list is now this: \n"+rows);
+	for (var i=0; i<numLines; i++) {
+		var line = lines[i];
+		var inputRow = line.split(',');
+		// inputRow[0] -> first word
+		// inputRow[1] -> second word
+		_trim(inputRow);
+		// console.log("Trimmed Output 2: ("+inputRow[0]+")("+inputRow[1]+")");
+		rows.push(_generateLeftEdgeDist(inputRow[0], inputRow[1]));
 	}
-	// console.log("Final rows list, right before flattening: \n"+rows);
-	if (rows.length == 0)
-		return 'no matches'
-	else {
-		var result = _flattenArrayByDelimiter(rows, '\n');
-		return result;
-	}
+	// test
+	// rows[0] = "stoofed"
+	// rows[1] = "stoofed"
+	var result = _flattenArrayByDelimiter(rows, '\n');
+
+	return result;
 }
 
+// area 3
 function transform1ColumnForLevDist(text) {
 	// console.log("Input: \n"+text);
 	text = text.trim();
@@ -104,6 +90,7 @@ function transform1ColumnForLevDist(text) {
 	return result;
 }
 
+// area 1
 function transform1ColumnForRSAAndLength(text) {
 	// console.log("Input: \n"+text);
 	text = text.trim();
@@ -130,7 +117,7 @@ function transform1ColumnForRSAAndLength(text) {
 	return result;
 }
 
-// Returns the transformed text
+// area 2
 function transform2ColumnsForRSAAndLength(text) {
 	// console.log("Input: \n"+text);
 	text = text.trim();

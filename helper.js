@@ -1,37 +1,23 @@
 /** Helper methods solely for main.js, test.js, verbs_reader.js **/
 
-// used within gatherOutputMatching to determine if 2 words are close enough to warrant doing a lev dist analysis
-// reasoning: before, we got output like drifted,advised,4 as remotely related - but this does not need eyes to see they are very different.
-function _beginningOfWordsCloseEnough(word1, word2) {
-	// If either word contains the other word
-	var pattern1 = new RegExp('\b'+word1,''); // word boundary + actual word to match
-	var pattern2 = new RegExp('\b'+word2,'');
-	if (word1.match(pattern2) || word2.match(pattern1))
-		return true;
+// creates row of word, LED, LED &divide; letter count of word
+function _generateLeftEdgeDist(word) {
+	var output = Array();
+	var led = _computeLED(word);
 
-	var count = 0; // if this reaches a certain num, then the words are quite equal and most likely are something like 'drift', 'drifted' or 'sleep', 'slept'
-	for (var i=0; i<word1.length; i++) {
-		if (word2[i] === undefined)
-			break;
-		else if (word1[i] === word2[i]) {
-			count++;
-		} else {
-			break; 
-		}
-	}
+	output[0] = word;
+	output[1] = led;
+	output[2] = led/_countLetters(word);
 
-	// if we have found some number of letters matching
-	if (count >= 3)
-		return true;
-	else
-		return false;
+	return _flattenArrayByDelimiter(output, DELIMITER);
 }
 
-// used within gatherOutputMatching to sort rows for one word by lev dist
-// a, b are entries of the multi-dimensional array, rowsForOneWord
-function _myComparator(a,b) {
-	// a[2] is lev dist of a, b[2] likewise
-	return parseInt(a[2]) - parseInt(b[2]);
+function _computeLED(word) {
+	var sumOfLeds = 0;
+	for (var i=0; i<word.length; i++) {
+		sumOfLeds += LED_MAP[(LED_MAP.indexOf(word[i])+1)]
+	}
+	return sumOfLeds;
 }
 
 function _generateLevDist(word1, word2) {
